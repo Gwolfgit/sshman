@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="551878a5-ed7f-4c2e-a496-7b68048808f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/sshman" beforeDir="false" afterPath="$PROJECT_DIR$/sshman" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/sshman.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/sshman/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/sshman/command.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/sshman/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sshman/sshman/database.py" beforeDir="false" />
+    <list default="true" id="551878a5-ed7f-4c2e-a496-7b68048808f9" name="Changes" comment="initial commit">
+      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sshman.py" beforeDir="false" afterPath="$PROJECT_DIR$/sshman.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sshman/command.py" beforeDir="false" afterPath="$PROJECT_DIR$/sshman/command.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +39,14 @@
       <option name="presentableId" value="Default" />
       <updated>1669169780183</updated>
     </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1669170118039</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669170118039</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -56,5 +59,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
   </component>
 </project>

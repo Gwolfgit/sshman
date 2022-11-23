@@ -15,9 +15,6 @@ Usage:
     sshman (-h | --help | --version)
 Options:
     -h, --help  Show this screen and exit.
-    -p, --port  Port [default: 22]
-    -k, --key   Keyname [default: id_rsa]
-    -i, --init  Copies key [default: false]
 """
 
 import sys
