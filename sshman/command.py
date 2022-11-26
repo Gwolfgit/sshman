@@ -1,6 +1,7 @@
 import os
 import sys
 import cmd
+import subprocess
 from pathlib import PurePath
 
 from tinydb import where
@@ -15,6 +16,11 @@ class SSHManCMD(cmd.Cmd):
     def __init__(self):
         super().__init__()
         self.db = SSHManDB()
+
+    @staticmethod
+    def err(msg):
+        print(msg)
+        exit(1)
 
     def add(
         self, name: str, destination: str, provider: str, keyname: str = None
@@ -67,22 +73,20 @@ class SSHManCMD(cmd.Cmd):
         self.db.rm_key(option)
         self.lsk()
 
-    def addkey(self, key):
-        path = os.path.join(Config.home_dir, f".ssh/{key}")
+    def addkey(self, keyname):
+        path = str(PurePath(Config.key_dir, keyname))
         try:
             with open(f"{path}.pub", "r") as file:
                 sshk = SSHKey(str(file.read()))
                 sshk.parse()
         except InvalidKeyError as err:
-            print("Invalid key:", err)
-            sys.exit(1)
+            self.err("Invalid key:", err)
         except NotImplementedError as err:
-            print("Invalid key type:", err)
-            sys.exit(1)
+            self.err("Invalid key type:", err)
         except FileNotFoundError as err:
-            print("File not found:", f"{path}.pub")
+            self.err(f"File not found: {path}.pub")
         else:
-            self.db.add_key(key, str(sshk.key_type.decode()), str(sshk.bits), path)
+            self.db.add_key(keyname, str(sshk.key_type.decode()), str(sshk.bits), path)
             self.lsk()
 
     def nkey(self, keyname: str, keytype: str = None, keybits: str = None):
@@ -96,11 +100,16 @@ class SSHManCMD(cmd.Cmd):
             return ["-t", keytype, "-b", keybits]
 
         kt = ktype()
+        command = [Config.keygen, "-f", path]
+        command.extend(kt)
 
-        os.execl(Config.keygen, "ssh-keygen", "-f", path, *kt, "-q", "-N", '""')
+        p1 = subprocess.Popen(["printf", "\n"], stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(command, stdin=p1.stdout, stdout=subprocess.PIPE)
+
+        for s in (str(p2.communicate())[2:-10]).split("\\n"):
+            print(s)
 
         self.addkey(keyname)
-        self.lsk()
 
     def lsk(self):
         data = []
@@ -114,13 +123,36 @@ class SSHManCMD(cmd.Cmd):
         else:
             print("No keys.")
 
-    def go(self, option):
-        serv = self.db.get_serv(option)
-        key = self.db.get_key_uuid(serv["serv_key"])["uuid"]
+    def go(self, serv_option, key_option):
+
+        try:
+            serv = self.db.get_serv(serv_option)
+        except:
+            self.err("Invalid server")
+
+        if not key_option:
+            try:
+                key = self.db.get_key_uuid(serv["serv_key"])["key_path"]
+            except IndexError:
+                try:
+                    key = self.db.get_key()["key_path"]
+                except IndexError:
+                    self.err("There are no default keys configured. Try sshman newkey.")
+        else:
+            try:
+                key = self.db.get_key(key_option)["key_path"]
+            except IndexError:
+                self.err("Invalid key")
 
         if not serv:
-            print("Invalid server")
+            self.err("Invalid server")
         else:
-            print(" ".join([Config.sshbin, serv["serv_dest"], "-i", key]))
-            os.execl(Config.sshbin, "ssh", serv["serv_dest"], "-i", key)
-            exit()
+            os.execl(
+                str(Config.sshbin),
+                "ssh",
+                str(serv["serv_dest"]),
+                "-o",
+                "IdentitiesOnly=yes",
+                "-i",
+                str(key),
+            )

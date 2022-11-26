@@ -4,7 +4,7 @@ SSHman v0.8
 
 Usage:
     sshman ls
-    sshman go <id>/<name>
+    sshman go <id>/<name> [<keyid>/<keyname>]
     sshman add <name> <user@host:port> <provider> [<key>]
     sshman rm <id>
     sshman lsk
@@ -40,7 +40,8 @@ if __name__ == "__main__":
             shm.ls()
         case "go":
             shm.go(
-                opt["<id>/<name>"]
+                opt["<id>/<name>"],
+                opt["<keyid>/<keyname>"],
             )
         case "rm":
             shm.rm(
