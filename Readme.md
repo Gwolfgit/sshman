@@ -1,4 +1,9 @@
 # SSHMan
+
+!!!! BROKEN !!!!
+Needs a major overhaul, does not work correctly righ tnow. I'll hopefully have time to get around to it soon.
+
+
 A simple utility to manage ssh servers and keys.
 Uses docopt and tinydb.
 
