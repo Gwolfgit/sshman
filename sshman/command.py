@@ -10,6 +10,7 @@ from sshpubkeys import SSHKey, InvalidKeyError
 
 from .database import SSHManDB
 from .config import Config
+from security import safe_command
 
 
 class SSHManCMD(cmd.Cmd):
@@ -103,8 +104,8 @@ class SSHManCMD(cmd.Cmd):
         command = [Config.keygen, "-f", path]
         command.extend(kt)
 
-        p1 = subprocess.Popen(["printf", "\n"], stdout=subprocess.PIPE)
-        p2 = subprocess.Popen(command, stdin=p1.stdout, stdout=subprocess.PIPE)
+        p1 = safe_command.run(subprocess.Popen, ["printf", "\n"], stdout=subprocess.PIPE)
+        p2 = safe_command.run(subprocess.Popen, command, stdin=p1.stdout, stdout=subprocess.PIPE)
 
         for s in (str(p2.communicate())[2:-10]).split("\\n"):
             print(s)
